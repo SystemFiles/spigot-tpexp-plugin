@@ -1,0 +1,5 @@
+# -- TPExp Configuration -- #
+# Teleport at cost of Exp #
+
+# Modify the amount of experience cost per block of distance in minecraft
+costPerBlock: 0.10
