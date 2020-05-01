@@ -27,3 +27,5 @@ target/*
 
 # Do not include IDE settings files
 .settings/*
+.idea/*
+.DS_Store
