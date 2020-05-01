@@ -1,5 +1,7 @@
 version: 2.1
-
+filters:
+  branches:
+    only: master
 jobs:
   build:
     docker:
@@ -7,4 +9,15 @@ jobs:
     steps:
       - checkout
       - run: mvn clean install
-      - run: ls -l target
+  publish-release:
+    docker:
+      - image: circleci/golang:1.8
+    steps:
+      - attach_workspace:
+          at: ./target
+      - run:
+          name: "Publish Plugin Release"
+          command: |
+            go get github.com/tcnksm/ghr
+            VERSION=$(my-binary --version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./target/TPExp-${PLUGIN_VERSION}-SNAPSHOT.jar
