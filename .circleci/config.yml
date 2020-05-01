@@ -1,12 +1,10 @@
 version: 2.1
 
-orbs:
-  maven: circleci/maven@1.0.1
-
-workflows:
-  maven_test:
-    jobs:
-      - maven/test:
-          command: '-X verify'
-      - maven/compile:
-          command: 'clean install'
+jobs:
+  build:
+    docker:
+      - image: maven:3.6.3-jdk-8
+    steps:
+      - checkout
+      - run: mvn clean install
+      - run: ls -l target
