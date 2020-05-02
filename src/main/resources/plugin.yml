@@ -14,21 +14,7 @@ commands:
     description: Base command for TPExp
     usage: /tpexp [ point <x> <y> <z> | player <player_name> | accept | deny | reload ]
 permissions:
-  tpexp.tpexp:
-    description: Allows the base command
-    default: not op
-  tpexp.point:
-    description: Allows the use of /tpexp point <xyz>
-    default: op
   tpexp.player:
-    description: Allows the use of the /tpexp player <player_name> command
-    default: not op
-  tpexp.accept:
-    description: Allows the ability to accept teleport requests for other players or self
-    default: not op
-  tpexp.deny:
-    description: Allows the ability to deny teleport requests
-    default: not op
-  tpexp.reload:
-    description: Reloads all configuration changes into running server
-    default: op
+    description: Access to most commands
+  tpexp.admin:
+    description: Access to admin commands
