@@ -20,4 +20,4 @@ jobs:
           command: |
             go get github.com/tcnksm/ghr
             VERSION=$(my-binary --version)
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./target/TPExp-${PLUGIN_VERSION}-SNAPSHOT.jar
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./target/TPExp-${PLUGIN_VER}-SNAPSHOT.jar
