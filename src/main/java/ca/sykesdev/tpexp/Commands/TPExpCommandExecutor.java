@@ -90,7 +90,13 @@ public class TPExpCommandExecutor implements CommandExecutor {
 
         double costPerBlock = this.plugin.getConfig().getDouble("costPerBlock");
             if (label.equalsIgnoreCase("tpexp")) {
-                if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+                if (args.length == 0) {
+                    sender.sendMessage(Message.formatMessage("TPExp is a simple teleport plugin that assigns exp cost to teleports" +
+                            "\nUsage: /tpexp " + ChatColor.GOLD +  "[ point | player ] " + ChatColor.WHITE +
+                            "\n\t/tpexp point " + ChatColor.GOLD + "[X] [Y] [Z]" + ChatColor.WHITE + "" +
+                            "\n\t/tpexp player" + ChatColor.GOLD + "[ player_name ] " + ChatColor.WHITE + "" +
+                            "\n\t/tpexp " + ChatColor.GOLD + "[ accept | deny ]"));
+                } else if (args.length == 1 && args[0].equalsIgnoreCase("reload") && sender.hasPermission("tpexp.reload")) {
                     sender.sendMessage(Message.formatMessage("Reloading configuration..."));
                     this.plugin.reloadConfig();
                     sender.sendMessage(Message.formatMessage("Reloaded configuration!"));
@@ -100,7 +106,7 @@ public class TPExpCommandExecutor implements CommandExecutor {
                         if (args.length >= 1) {
                             switch (args[0]) {
                                 case "point":
-                                    if (args.length == 4) {
+                                    if (args.length == 4 && p.hasPermission("tpexp.point")) {
                                         try {
                                             double x = Double.parseDouble(args[1]);
                                             double y = Double.parseDouble(args[2]);
@@ -130,7 +136,7 @@ public class TPExpCommandExecutor implements CommandExecutor {
                                     }
                                     break;
                                 case "player":
-                                    if (args.length == 2) {
+                                    if (args.length == 2 && p.hasPermission("tpexp.player")) {
                                         Player targetPlayer = Bukkit.getPlayer(args[1]);
                                         if (targetPlayer != null && targetPlayer.isOnline() && targetPlayer != p) {
                                             p.sendMessage(Message.formatMessage("Sending teleport request to " + ChatColor.GOLD
@@ -165,32 +171,35 @@ public class TPExpCommandExecutor implements CommandExecutor {
                                     }
                                     break;
                                 case "accept":
-                                    if (this.transactions.containsKey(p.getUniqueId().toString())) {
-                                        if (this.transactions.get(p.getUniqueId().toString()).getType() == RequestType.P2P) {
-                                            // This is a player-to-player request... must be accepted by target player
-                                            this.fulfillTransaction(p.getUniqueId().toString());
+                                    if (p.hasPermission("tpexp.accept")) {
+                                        if (this.transactions.containsKey(p.getUniqueId().toString())) {
+                                            if (this.transactions.get(p.getUniqueId().toString()).getType() == RequestType.P2P) {
+                                                // This is a player-to-player request... must be accepted by target player
+                                                this.fulfillTransaction(p.getUniqueId().toString());
+                                            } else {
+                                                this.fulfillTransaction(p.getUniqueId().toString());
+                                            }
                                         } else {
-                                            this.fulfillTransaction(p.getUniqueId().toString());
+                                            p.sendMessage(Message.formatMessage("No transactions pending..."));
                                         }
-                                    } else {
-                                        p.sendMessage(Message.formatMessage("No transactions pending..."));
                                     }
-
                                     break;
                                 case "deny":
-                                    if (this.transactions.containsKey(p.getUniqueId().toString())) {
-                                        if (this.transactions.get(p.getUniqueId().toString()).getType() == RequestType.P2P) {
-                                            // This is a player-to-player request... must be denied by target player
-                                            this.transactions.get(p.getUniqueId().toString()).getPlayer().
-                                                    sendMessage(Message.formatMessage(
-                                                            "Your Teleport request to " + ChatColor.GOLD
-                                                                    + p.getDisplayName() + " was denied..."));
-                                        }
+                                    if (p.hasPermission("tpexp.deny")) {
+                                        if (this.transactions.containsKey(p.getUniqueId().toString())) {
+                                            if (this.transactions.get(p.getUniqueId().toString()).getType() == RequestType.P2P) {
+                                                // This is a player-to-player request... must be denied by target player
+                                                this.transactions.get(p.getUniqueId().toString()).getPlayer().
+                                                        sendMessage(Message.formatMessage(
+                                                                "Your Teleport request to " + ChatColor.GOLD
+                                                                        + p.getDisplayName() + " was denied..."));
+                                            }
 
-                                        p.sendMessage(Message.formatMessage(ChatColor.BOLD + "Teleport request denied.."));
-                                        this.transactions.remove(p.getUniqueId().toString());
-                                    } else {
-                                        p.sendMessage(Message.formatMessage("No transactions pending..."));
+                                            p.sendMessage(Message.formatMessage(ChatColor.BOLD + "Teleport request denied.."));
+                                            this.transactions.remove(p.getUniqueId().toString());
+                                        } else {
+                                            p.sendMessage(Message.formatMessage("No transactions pending..."));
+                                        }
                                     }
                                     break;
                                 default:

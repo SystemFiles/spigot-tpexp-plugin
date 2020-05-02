@@ -29,3 +29,6 @@ permissions:
   tpexp.deny:
     description: Allows the ability to deny teleport requests
     default: not op
+  tpexp.reload:
+    description: Reloads all configuration changes into running server
+    default: op
