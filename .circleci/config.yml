@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run: mvn clean install
-  publish-release:
+  publish:
     docker:
       - image: circleci/golang:1.8
     steps:
