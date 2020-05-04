@@ -7,6 +7,9 @@ import java.util.HashMap;
 public class Data {
     private HashMap<String, Transaction> transactions = new HashMap<>();
 
+    /**
+     * The data constructor
+     */
     public Data() {
         this.transactions = new HashMap<>();
     }

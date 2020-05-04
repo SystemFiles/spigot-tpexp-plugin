@@ -14,6 +14,14 @@ import java.util.List;
 
 public class TPExpTabCompleter implements TabCompleter {
 
+    /**
+     * Creates auto-complete suggestions
+     * @param sender the sender of the command
+     * @param command The command being sent
+     * @param alias Any aliases
+     * @param args The arguments being send with the command (will suggest further)
+     * @return The list of suggested arguments for next
+     */
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                 @NotNull String alias, @NotNull String[] args) {
