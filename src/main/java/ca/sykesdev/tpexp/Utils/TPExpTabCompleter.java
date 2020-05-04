@@ -38,7 +38,9 @@ public class TPExpTabCompleter implements TabCompleter {
             commands.add("point");
             commands.add("player");
             commands.add("accept");
+            commands.add("acceptTpRequest");
             commands.add("deny");
+            commands.add("denyTpRequest");
             commands.add("reload");
 
             StringUtil.copyPartialMatches(args[0], commands, completions);
